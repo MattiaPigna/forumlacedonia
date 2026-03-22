@@ -87,7 +87,7 @@ export default function Navbar() {
       </div>
 
       {/* ── Mobile Drawer ── */}
-      <div className={`md:hidden overflow-hidden transition-all duration-300 ${isMenuOpen ? 'max-h-[400px]' : 'max-h-0'}`}>
+      <div className={`md:hidden overflow-hidden transition-all duration-300 ${isMenuOpen ? 'max-h-[600px]' : 'max-h-0'}`}>
         <div className="bg-[#111111] border-t border-white/[0.06] px-6 py-5 flex flex-col gap-1">
           {NAV_LINKS.map(({ label, href }) => (
             <a
