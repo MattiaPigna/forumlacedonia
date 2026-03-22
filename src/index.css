@@ -1,0 +1,197 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Global reset & base ──────────────────────────────────── */
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background-color: #0a0a0a;
+    color: #ffffff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* ─── Design Tokens ─────────────────────────────────────────── */
+:root {
+  --bg:           #0a0a0a;
+  --bg-elevated:  #111111;
+  --bg-card:      rgba(255,255,255,0.04);
+  --border:       rgba(255,255,255,0.08);
+  --border-hover: rgba(99,102,241,0.5);
+  --indigo:       #6366f1;
+  --violet:       #8b5cf6;
+  --text-primary: #ffffff;
+  --text-secondary: #9ca3af;
+  --text-muted:   #6b7280;
+}
+
+/* ─── Glass Card ────────────────────────────────────────────── */
+@layer components {
+  .glass {
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 1rem;
+  }
+
+  .glass-hover {
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .glass-hover:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(99,102,241,0.35);
+    box-shadow: 0 0 28px rgba(99,102,241,0.12);
+  }
+
+  /* Primary CTA */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    background: #6366f1;
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 9999px;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+  }
+  .btn-primary:hover {
+    background: #818cf8;
+    box-shadow: 0 0 28px rgba(99,102,241,0.55);
+  }
+
+  /* Ghost CTA */
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    background: rgba(255,255,255,0.06);
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 9999px;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .btn-ghost:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.2);
+  }
+
+  /* Gradient text */
+  .text-gradient {
+    background: linear-gradient(to bottom, #ffffff 40%, #6b7280 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-gradient-indigo {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+/* ─── Section Glow Backgrounds ─────────────────────────────── */
+.section-glow-indigo {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(99,102,241,0.12), transparent),
+    #0a0a0a;
+}
+
+.section-glow-violet {
+  background:
+    radial-gradient(ellipse 70% 60% at 80% 50%, rgba(139,92,246,0.1), transparent),
+    radial-gradient(ellipse 60% 40% at 20% 50%, rgba(99,102,241,0.07), transparent),
+    #0a0a0a;
+}
+
+.section-glow-center {
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(99,102,241,0.1), transparent),
+    #0a0a0a;
+}
+
+/* ─── Input Dark ────────────────────────────────────────────── */
+.input-dark {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  color: #fff;
+  font-size: 0.875rem;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.input-dark::placeholder { color: #4b5563; }
+.input-dark:focus {
+  border-color: rgba(99,102,241,0.6);
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+}
+.input-dark.error { border-color: rgba(239,68,68,0.6); }
+
+/* ─── Scroll Reveal ─────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Grid dot pattern ──────────────────────────────────────── */
+.dot-pattern {
+  background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* ─── Accordion ─────────────────────────────────────────────── */
+.accordion-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s ease;
+}
+.accordion-body.open {
+  grid-template-rows: 1fr;
+}
+.accordion-inner { overflow: hidden; }
+
+/* ─── Stagger animation delays (Hero) ──────────────────────── */
+.delay-1 { animation-delay: 100ms; }
+.delay-2 { animation-delay: 220ms; }
+.delay-3 { animation-delay: 340ms; }
+.delay-4 { animation-delay: 460ms; }
+.delay-5 { animation-delay: 580ms; }
+.delay-6 { animation-delay: 700ms; }
+
+/* ─── Border Beam ───────────────────────────────────────────── */
+/* Houdini @property per animare la variabile CSS nel conic-gradient */
+@property --beam-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes beamRotate {
+  to { --beam-angle: 360deg; }
+}
+
+/* La card rallenta a riposo, accelera all'hover tramite classe padre */
+.card-beam:hover > [aria-hidden="true"] {
+  animation-duration: 1s !important;
+}
