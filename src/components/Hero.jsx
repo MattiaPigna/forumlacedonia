@@ -140,7 +140,7 @@ export default function Hero() {
             onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 0 40px rgba(74,222,128,0.6)' }}
             onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 0 24px rgba(74,222,128,0.35)' }}
           >
-            Partecipa al Bando
+            Candidati
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>

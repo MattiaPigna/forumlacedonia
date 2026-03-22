@@ -3,11 +3,12 @@ import logoImg from '../assets/logo.png'
 const CANDIDATURE_URL = 'https://sign-here-easily.lovable.app/'
 
 const NAV_LINKS = [
-  { label: 'Chi Siamo',    href: '#about'       },
-  { label: 'Finalità',     href: '#principles'  },
-  { label: 'Lab Creativo', href: '#creative'    },
-  { label: 'FAQ',          href: '#faq'         },
-  { label: 'Regolamento',  href: '#regolamento' },
+  { label: 'Chi Siamo',    href: '#about'                            },
+  { label: 'Finalità',     href: '#principles'                       },
+  { label: 'Lab Creativo', href: '#creative'                         },
+  { label: 'FAQ',          href: '#faq'                              },
+  { label: 'Regolamento',  href: '#regolamento'                      },
+  { label: 'Contattaci',   href: '#contact'                          },
 ]
 
 const LEGAL_LINKS = [
@@ -45,13 +46,9 @@ export default function Footer() {
 
           {/* Brand */}
           <div className="md:col-span-2">
-            <a href="#" className="flex items-center gap-3 mb-5">
-              <img
-                src={logoImg}
-                alt="Logo Forum dei Giovani di Lacedonia"
-                className="h-12 w-auto object-contain"
-                style={{ filter: 'drop-shadow(0 0 1px rgba(255,255,255,1)) drop-shadow(0 0 1px rgba(255,255,255,1)) drop-shadow(0 0 2px rgba(255,255,255,0.8))' }}
-              />
+            <a href="#" className="flex items-center gap-2 mb-5">
+              <span className="text-white font-bold text-base tracking-wide">Forum dei Giovani</span>
+              <span className="text-indigo-400 text-sm font-medium">Lacedonia</span>
             </a>
             <p className="text-gray-600 text-sm leading-relaxed max-w-xs mb-7">
               Organo consultivo di democrazia partecipativa istituito ai sensi della
