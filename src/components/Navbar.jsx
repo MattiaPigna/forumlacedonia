@@ -46,6 +46,7 @@ export default function Navbar() {
               src={logoImg}
               alt="Logo Forum dei Giovani di Lacedonia"
               className="h-8 w-auto object-contain"
+              style={{ filter: 'drop-shadow(0 0 1px rgba(255,255,255,1)) drop-shadow(0 0 1px rgba(255,255,255,1)) drop-shadow(0 0 2px rgba(255,255,255,0.8))' }}
             />
           </div>
         </a>
