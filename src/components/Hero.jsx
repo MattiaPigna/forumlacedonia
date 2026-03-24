@@ -1,14 +1,9 @@
 import logoImg     from '../assets/logo.png'
 import SmoothVideo from './SmoothVideo'
+import { useContent } from '../context/ContentContext'
+import { useIntersectionCounter } from '../hooks/useIntersectionCounter'
 
 const CANDIDATURE_URL = 'https://sign-here-easily.lovable.app/'
-
-const STATS = [
-  { value: '16–34', label: 'Anni per candidarsi'    },
-  { value: '2',     label: 'Anni di mandato'         },
-  { value: '5',     label: 'Laboratori creativi'     },
-  { value: 'Free',  label: 'Partecipazione gratuita' },
-]
 
 const STARS = Array.from({ length: 130 }, (_, i) => {
   const big = Math.random() > 0.88
@@ -24,7 +19,25 @@ const STARS = Array.from({ length: 130 }, (_, i) => {
   }
 })
 
+function AnimatedStat({ value, label }) {
+  const numeric = parseInt(String(value).replace(/\D/g, ''), 10)
+  const isNum = !isNaN(numeric) && String(numeric) === String(value)
+  const [count, ref] = useIntersectionCounter(isNum ? numeric : 0)
+  return (
+    <div ref={ref} className="flex flex-col items-center gap-1 first:pl-0 pl-4 md:pl-6">
+      <span className="text-2xl font-bold text-white">{isNum ? count : value}</span>
+      <span className="text-gray-500 text-xs text-center leading-tight">{label}</span>
+    </div>
+  )
+}
+
 export default function Hero() {
+  const { content } = useContent()
+  const baseStats = content.stats
+  const STATS = content.iscritti > 0
+    ? [...baseStats, { value: content.iscritti, label: 'Iscritti al Forum' }]
+    : baseStats
+
   return (
     <section
       aria-label="Benvenuti nel Forum dei Giovani"
@@ -109,7 +122,7 @@ export default function Hero() {
           <span
             className="block mt-1"
             style={{
-              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a78bfa 100%)',
+              background: 'linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 50%, var(--accent-5) 100%)',
               WebkitBackgroundClip: 'text',
               backgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
@@ -134,7 +147,7 @@ export default function Hero() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full font-semibold text-sm text-black transition-all duration-200"
             style={{
-              background: 'linear-gradient(135deg, #4ade80 0%, #22d3ee 100%)',
+              background: 'linear-gradient(135deg, var(--accent-3) 0%, var(--accent-4) 100%)',
               boxShadow: '0 0 24px rgba(74,222,128,0.35)',
             }}
             onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 0 40px rgba(74,222,128,0.6)' }}
@@ -147,13 +160,31 @@ export default function Hero() {
           </a>
 
           <a
-            href="#principles"
+            href="/#principles"
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-medium text-sm text-white border border-white/15 backdrop-blur-md transition-all duration-200"
             style={{ background: 'rgba(255,255,255,0.06)' }}
             onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)' }}
             onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)' }}
           >
             Scopri le Finalità
+          </a>
+
+          <a
+            href="/#bacheca"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-sm transition-all duration-200"
+            style={{
+              background: 'linear-gradient(135deg, rgba(99,102,241,0.25) 0%, rgba(139,92,246,0.25) 100%)',
+              border: '1px solid rgba(99,102,241,0.4)',
+              color: '#a5b4fc',
+              backdropFilter: 'blur(12px)',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'linear-gradient(135deg, rgba(99,102,241,0.4) 0%, rgba(139,92,246,0.4) 100%)'; e.currentTarget.style.borderColor = 'rgba(99,102,241,0.7)' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'linear-gradient(135deg, rgba(99,102,241,0.25) 0%, rgba(139,92,246,0.25) 100%)'; e.currentTarget.style.borderColor = 'rgba(99,102,241,0.4)' }}
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+            Proponi un'idea
           </a>
         </div>
 
@@ -165,10 +196,7 @@ export default function Hero() {
           >
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 divide-x divide-white/[0.06]">
               {STATS.map(({ value, label }) => (
-                <div key={label} className="flex flex-col items-center gap-1 first:pl-0 pl-4 md:pl-6">
-                  <span className="text-2xl font-bold text-white">{value}</span>
-                  <span className="text-gray-500 text-xs text-center leading-tight">{label}</span>
-                </div>
+                <AnimatedStat key={label} value={value} label={label} />
               ))}
             </div>
           </div>

@@ -1,32 +1,6 @@
 import { useState } from 'react'
 import { useReveal } from '../hooks/useReveal'
-
-const FAQS = [
-  {
-    q: 'Chi può candidarsi al Forum dei Giovani?',
-    a: 'Possono candidarsi tutti i giovani che abbiano compiuto i 16 anni e non abbiano ancora compiuto i 35 anni alla data di presentazione della candidatura. È richiesta la residenza nel Comune di Lacedonia, la cittadinanza italiana o di uno Stato UE (oppure permesso di soggiorno valido) e il godimento dei diritti civili.',
-  },
-  {
-    q: 'Qual è il requisito di residenza?',
-    a: 'Per partecipare al Forum è necessario essere residenti nel Comune di Lacedonia. Possono partecipare come uditori — senza diritto di voto — anche giovani domiciliati nel Comune o che vi frequentino un istituto scolastico o un luogo di lavoro.',
-  },
-  {
-    q: 'Quanto dura il mandato dei membri eletti?',
-    a: 'Il mandato dei componenti del Forum ha durata biennale (2 anni). Le cariche istituzionali — Presidente, Vice Presidente, Tesoriere, Segretario — sono rinnovabili per un massimo di due mandati consecutivi.',
-  },
-  {
-    q: 'Come funziona il processo di candidatura?',
-    a: 'La candidatura avviene tramite il modulo ufficiale disponibile sul sito del Comune di Lacedonia o presso l\'ufficio comunale. Occorre allegare copia del documento d\'identità, codice fiscale e una breve lettera di presentazione. Puoi anche candidarti direttamente tramite il link dedicato.',
-  },
-  {
-    q: 'Con quale frequenza si riunisce il Forum?',
-    a: "L'Assemblea si riunisce in seduta ordinaria almeno una volta ogni due mesi. Le sedute straordinarie possono essere convocate dal Presidente o su richiesta di almeno un terzo dei membri. Tutte le sedute sono pubbliche.",
-  },
-  {
-    q: 'Il Forum ha poteri deliberativi vincolanti?',
-    a: 'Il Forum ha natura consultiva. Può formulare proposte, pareri e raccomandazioni agli organi del Comune. La Giunta Comunale è tenuta a prenderne atto e rispondere motivatamente entro 60 giorni.',
-  },
-]
+import { useContent } from '../context/ContentContext'
 
 function FAQItem({ q, a, isOpen, onToggle }) {
   return (
@@ -64,9 +38,11 @@ function FAQItem({ q, a, isOpen, onToggle }) {
 }
 
 export default function FAQ() {
+  const { content }               = useContent()
   const [openIndex, setOpenIndex] = useState(null)
   const [ref, isVisible]          = useReveal()
 
+  const FAQS = content.faqs
   const toggle = (i) => setOpenIndex(openIndex === i ? null : i)
 
   return (

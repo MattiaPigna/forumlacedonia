@@ -26,6 +26,11 @@
   --border-hover: rgba(99,102,241,0.5);
   --indigo:       #6366f1;
   --violet:       #8b5cf6;
+  --accent-1: #6366f1;
+  --accent-2: #8b5cf6;
+  --accent-3: #4ade80;
+  --accent-4: #22d3ee;
+  --accent-5: #a78bfa;
   --text-primary: #ffffff;
   --text-secondary: #9ca3af;
   --text-muted:   #6b7280;
@@ -47,7 +52,7 @@
   .glass-hover:hover {
     background: rgba(255,255,255,0.07);
     border-color: rgba(99,102,241,0.35);
-    box-shadow: 0 0 28px rgba(99,102,241,0.12);
+    box-shadow: 0 0 28px color-mix(in srgb, var(--accent-1) 12%, transparent);
   }
 
   /* Primary CTA */
@@ -56,7 +61,7 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 1.75rem;
-    background: #6366f1;
+    background: var(--accent-1);
     color: #fff;
     font-size: 0.875rem;
     font-weight: 600;
@@ -64,7 +69,7 @@
     transition: background 0.2s ease, box-shadow 0.2s ease;
   }
   .btn-primary:hover {
-    background: #818cf8;
+    background: var(--accent-2);
     box-shadow: 0 0 28px rgba(99,102,241,0.55);
   }
 
@@ -96,7 +101,7 @@
   }
 
   .text-gradient-indigo {
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -138,8 +143,8 @@
 }
 .input-dark::placeholder { color: #4b5563; }
 .input-dark:focus {
-  border-color: rgba(99,102,241,0.6);
-  box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+  border-color: color-mix(in srgb, var(--accent-1) 60%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-1) 12%, transparent);
 }
 .input-dark.error { border-color: rgba(239,68,68,0.6); }
 

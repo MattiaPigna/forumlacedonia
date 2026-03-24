@@ -131,7 +131,7 @@ export default function CreativeLab() {
                   Proponi il tuo laboratorio alla Giunta Comunale.
                 </p>
                 <a
-                  href="#contact"
+                  href="/#contact"
                   className="inline-flex items-center gap-2 text-indigo-400 text-sm font-semibold hover:text-indigo-300 transition-colors"
                 >
                   Scrivici
