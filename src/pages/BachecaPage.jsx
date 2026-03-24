@@ -1,5 +1,6 @@
 import SubPageLayout from '../components/SubPageLayout'
 import EventiSection from '../components/EventiSection'
+import DocumentiSection from '../components/DocumentiSection'
 import SondaggiSection from '../components/SondaggiSection'
 
 export default function BachecaPage() {
@@ -19,6 +20,7 @@ export default function BachecaPage() {
         </div>
 
         <EventiSection />
+        <DocumentiSection />
         <SondaggiSection />
 
         {/* CTA proponi idea */}
