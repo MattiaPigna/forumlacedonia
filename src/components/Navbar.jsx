@@ -5,7 +5,7 @@ const CANDIDATURE_URL = 'https://sign-here-easily.lovable.app/'
 const NAV_LINKS_DESKTOP = [
   { label: 'Chi Siamo',  href: '/chi-siamo'  },
   { label: 'Notizie',    href: '/notizie'    },
-  { label: 'Bacheca',    href: '/#bacheca'   },
+  { label: 'Bacheca',    href: '/bacheca'    },
   { label: 'Contattaci', href: '/#contact'   },
   { label: 'Candidati',  href: null          }, // placeholder per CTA
 ]
@@ -14,7 +14,7 @@ const NAV_LINKS_MOBILE = [
   { label: 'Chi Siamo',    href: '/chi-siamo'    },
   { label: 'Officine',     href: '/officine'     },
   { label: 'Notizie',      href: '/notizie'      },
-  { label: 'Bacheca',      href: '/#bacheca'     },
+  { label: 'Bacheca',      href: '/bacheca'      },
   { label: 'Calendario',   href: '/eventi'       },
   { label: 'Documenti',    href: '/documenti'    },
   { label: 'Regolamento',  href: '/regolamento'  },
@@ -27,7 +27,7 @@ const ESPLORA_LINKS = [
   { label: 'Regolamento', href: '/regolamento'},
   { label: 'Documenti',   href: '/documenti'  },
   { label: 'Calendario',  href: '/eventi'     },
-  { label: 'Sondaggi',    href: '/#sondaggi'  },
+  { label: 'Sondaggi',    href: '/bacheca'    },
   { label: 'FAQ',         href: '/#faq'       },
 ]
 

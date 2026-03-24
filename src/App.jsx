@@ -9,12 +9,11 @@ import OfficinePage    from './pages/OfficinePage'
 import RegolamentoPage from './pages/RegolamentoPage'
 import EventiPage      from './pages/EventiPage'
 import DocumentiPage   from './pages/DocumentiPage'
+import BachecaPage     from './pages/BachecaPage'
 import Navbar          from './components/Navbar'
 import Hero            from './components/Hero'
 import Principles      from './components/Principles'
 import Bacheca         from './components/Bacheca'
-import EventiSection   from './components/EventiSection'
-import DocumentiSection from './components/DocumentiSection'
 import SondaggiSection from './components/SondaggiSection'
 import FAQ             from './components/FAQ'
 import ContactSection  from './components/ContactSection'
@@ -53,9 +52,7 @@ function MainApp() {
       <Hero />
       <Principles />
       <Bacheca />
-      <EventiSection />
-      <DocumentiSection />
-      <SondaggiSection />
+      <SondaggiSection homeOnly />
       <FAQ />
       <ContactSection />
       <Footer />
@@ -76,6 +73,7 @@ export default function App() {
        path === '/regolamento' ? <RegolamentoPage /> :
        path === '/eventi'      ? <EventiPage />     :
        path === '/documenti'   ? <DocumentiPage />  :
+       path === '/bacheca'     ? <BachecaPage />    :
        <MainApp />}
     </ContentProvider>
   )

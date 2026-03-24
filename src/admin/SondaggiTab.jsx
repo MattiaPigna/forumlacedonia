@@ -44,13 +44,13 @@ export default function SondaggiTab() {
   const [editing, setEditing] = useState(null)
   const [saved, setSaved] = useState(false)
   const [form, setForm] = useState({
-    question: '', options: [{ id: genId(), text: '' }, { id: genId(), text: '' }], endDate: '', published: true, closed: false,
+    question: '', options: [{ id: genId(), text: '' }, { id: genId(), text: '' }], endDate: '', published: true, closed: false, showOnHome: false,
   })
 
   const sondaggi = content.sondaggi || []
 
   function openNew() {
-    setForm({ question: '', options: [{ id: genId(), text: '' }, { id: genId(), text: '' }], endDate: '', published: true, closed: false })
+    setForm({ question: '', options: [{ id: genId(), text: '' }, { id: genId(), text: '' }], endDate: '', published: true, closed: false, showOnHome: false })
     setEditing('new')
   }
   function openEdit(s) {
@@ -172,6 +172,19 @@ export default function SondaggiTab() {
               </label>
             </Field>
           </div>
+
+          <Field label="Mostra anche in Homepage">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <div
+                onClick={() => setForm(f => ({ ...f, showOnHome: !f.showOnHome }))}
+                className={`relative w-10 h-5 rounded-full transition-colors cursor-pointer ${form.showOnHome ? 'bg-amber-500' : 'bg-white/10'}`}
+              >
+                <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all ${form.showOnHome ? 'left-5' : 'left-0.5'}`} />
+              </div>
+              <span className="text-gray-400 text-sm">{form.showOnHome ? 'Visibile in homepage' : 'Solo in bacheca'}</span>
+            </label>
+            <p className="text-gray-600 text-xs mt-1">Se attivo, questo sondaggio appare anche nella homepage.</p>
+          </Field>
 
           <div className="flex gap-3 pt-2">
             <button

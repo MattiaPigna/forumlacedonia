@@ -93,11 +93,13 @@ function SondaggioCard({ sondaggio }) {
   )
 }
 
-export default function SondaggiSection() {
+export default function SondaggiSection({ homeOnly = false }) {
   const { content } = useContent()
   const [ref, isVisible] = useReveal()
 
-  const active = (content.sondaggi || []).filter(s => s.published && !s.closed)
+  const active = (content.sondaggi || []).filter(s =>
+    s.published && !s.closed && (!homeOnly || s.showOnHome)
+  )
 
   if (active.length === 0) return null
 
