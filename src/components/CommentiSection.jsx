@@ -1,21 +1,20 @@
-import { useState } from 'react'
-
-const COMMENTI_KEY = 'forum_commenti'
-
-function loadCommenti() {
-  try { return JSON.parse(localStorage.getItem(COMMENTI_KEY) || '[]') } catch { return [] }
-}
-
-function saveCommenti(commenti) {
-  localStorage.setItem(COMMENTI_KEY, JSON.stringify(commenti))
-}
+import { useState, useEffect } from 'react'
+import { ref, onValue, set } from 'firebase/database'
+import { db } from '../firebase'
 
 export default function CommentiSection({ articleId }) {
-  const [commenti, setCommenti] = useState(loadCommenti)
+  const [commenti, setCommenti] = useState([])
   const [nome, setNome] = useState('')
   const [testo, setTesto] = useState('')
   const [sent, setSent] = useState(false)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    const unsub = onValue(ref(db, 'commenti'), snapshot => {
+      setCommenti(snapshot.val() || [])
+    })
+    return () => unsub()
+  }, [])
 
   const approvati = commenti.filter(c => c.articleId === articleId && c.approved)
 
@@ -32,8 +31,7 @@ export default function CommentiSection({ articleId }) {
       approved: false,
     }
     const updated = [...commenti, newComment]
-    saveCommenti(updated)
-    setCommenti(updated)
+    set(ref(db, 'commenti'), updated)
     setNome('')
     setTesto('')
     setSent(true)
@@ -49,7 +47,6 @@ export default function CommentiSection({ articleId }) {
         )}
       </h3>
 
-      {/* Lista commenti approvati */}
       {approvati.length > 0 ? (
         <div className="space-y-4 mb-6">
           {approvati.map(c => (
@@ -66,7 +63,6 @@ export default function CommentiSection({ articleId }) {
         <p className="text-gray-600 text-sm mb-6">Nessun commento ancora. Sii il primo!</p>
       )}
 
-      {/* Form nuovo commento */}
       {sent ? (
         <div className="p-4 rounded-xl border border-green-500/20 bg-green-500/5 text-green-400 text-sm">
           Commento inviato! Sarà pubblicato dopo la moderazione.

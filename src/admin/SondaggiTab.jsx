@@ -1,13 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { ref, onValue, set, remove } from 'firebase/database'
 import { useContent } from '../context/ContentContext'
+import { db } from '../firebase'
 
 function genId() { return Date.now() + Math.random() }
-
-const VOTI_KEY = 'forum_voti'
-
-function loadVoti() {
-  try { return JSON.parse(localStorage.getItem(VOTI_KEY) || '{}') } catch { return {} }
-}
 
 function SaveBadge({ show }) {
   if (!show) return null
@@ -43,11 +39,19 @@ export default function SondaggiTab() {
   const { content, updateContent } = useContent()
   const [editing, setEditing] = useState(null)
   const [saved, setSaved] = useState(false)
+  const [votiTutti, setVotiTutti] = useState({})
   const [form, setForm] = useState({
     question: '', options: [{ id: genId(), text: '' }, { id: genId(), text: '' }], endDate: '', published: true, closed: false, showOnHome: false,
   })
 
   const sondaggi = content.sondaggi || []
+
+  useEffect(() => {
+    const unsub = onValue(ref(db, 'voti'), snapshot => {
+      setVotiTutti(snapshot.val() || {})
+    })
+    return () => unsub()
+  }, [])
 
   function openNew() {
     setForm({ question: '', options: [{ id: genId(), text: '' }, { id: genId(), text: '' }], endDate: '', published: true, closed: false, showOnHome: false })
@@ -84,9 +88,7 @@ export default function SondaggiTab() {
   }
   function resetVoti(id) {
     if (!confirm('Azzerare tutti i voti di questo sondaggio?')) return
-    const voti = loadVoti()
-    delete voti[id]
-    localStorage.setItem(VOTI_KEY, JSON.stringify(voti))
+    remove(ref(db, `voti/${id}`))
     setSaved(true)
     setTimeout(() => setSaved(false), 2000)
   }
@@ -233,8 +235,7 @@ export default function SondaggiTab() {
       ) : (
         <div className="space-y-4">
           {sondaggi.map(s => {
-            const voti = loadVoti()
-            const sVoti = voti[s.id] || {}
+            const sVoti = votiTutti[s.id] || {}
             const totale = Object.values(sVoti).reduce((a, b) => a + b, 0)
             return (
               <div key={s.id} className="p-5 rounded-xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] transition-colors">
@@ -266,7 +267,6 @@ export default function SondaggiTab() {
                   </div>
                 </div>
 
-                {/* Risultati */}
                 {totale > 0 && (
                   <div className="space-y-2 mt-3 pt-3 border-t border-white/[0.06]">
                     {(s.options || []).map(opt => {

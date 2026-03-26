@@ -1,32 +1,26 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { ref, onValue, update, increment } from 'firebase/database'
 import { useContent } from '../context/ContentContext'
 import { useReveal } from '../hooks/useReveal'
-
-const VOTI_KEY = 'forum_voti'
-
-function loadVoti() {
-  try { return JSON.parse(localStorage.getItem(VOTI_KEY) || '{}') } catch { return {} }
-}
-
-function saveVoti(voti) {
-  localStorage.setItem(VOTI_KEY, JSON.stringify(voti))
-}
+import { db } from '../firebase'
 
 function SondaggioCard({ sondaggio }) {
   const votedKey = 'voted_' + sondaggio.id
   const [voted, setVoted] = useState(() => !!sessionStorage.getItem(votedKey))
-  const [voti, setVoti] = useState(loadVoti)
+  const [sVoti, setSVoti] = useState({})
 
-  const sVoti = voti[sondaggio.id] || {}
+  useEffect(() => {
+    const unsub = onValue(ref(db, `voti/${sondaggio.id}`), snapshot => {
+      setSVoti(snapshot.val() || {})
+    })
+    return () => unsub()
+  }, [sondaggio.id])
+
   const totale = Object.values(sVoti).reduce((a, b) => a + b, 0)
 
   function handleVote(optId) {
     if (voted) return
-    const newVoti = { ...voti }
-    if (!newVoti[sondaggio.id]) newVoti[sondaggio.id] = {}
-    newVoti[sondaggio.id][optId] = (newVoti[sondaggio.id][optId] || 0) + 1
-    saveVoti(newVoti)
-    setVoti(newVoti)
+    update(ref(db, `voti/${sondaggio.id}`), { [optId]: increment(1) })
     sessionStorage.setItem(votedKey, '1')
     setVoted(true)
   }
@@ -48,7 +42,6 @@ function SondaggioCard({ sondaggio }) {
       </div>
 
       {voted ? (
-        /* Risultati */
         <div className="space-y-3">
           {opts.map(opt => {
             const count = sVoti[opt.id] || 0
@@ -75,7 +68,6 @@ function SondaggioCard({ sondaggio }) {
           <p className="text-gray-600 text-xs text-center mt-2">{totale} {totale === 1 ? 'voto totale' : 'voti totali'} — Grazie per aver votato!</p>
         </div>
       ) : (
-        /* Opzioni cliccabili */
         <div className="space-y-2">
           {opts.map(opt => (
             <button
@@ -95,7 +87,7 @@ function SondaggioCard({ sondaggio }) {
 
 export default function SondaggiSection({ homeOnly = false }) {
   const { content } = useContent()
-  const [ref, isVisible] = useReveal()
+  const [ref2, isVisible] = useReveal()
 
   const active = (content.sondaggi || []).filter(s =>
     s.published && !s.closed && (!homeOnly || s.showOnHome)
@@ -106,7 +98,7 @@ export default function SondaggiSection({ homeOnly = false }) {
   return (
     <section id="sondaggi" className="py-32 section-glow-indigo">
       <div
-        ref={ref}
+        ref={ref2}
         className={`max-w-6xl mx-auto px-6 reveal ${isVisible ? 'visible' : ''}`}
       >
         <div className="flex items-center gap-3 mb-5">

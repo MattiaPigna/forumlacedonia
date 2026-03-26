@@ -1,19 +1,18 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { ref, onValue, set } from 'firebase/database'
 import { useContent } from '../context/ContentContext'
-
-const COMMENTI_KEY = 'forum_commenti'
-
-function loadCommenti() {
-  try { return JSON.parse(localStorage.getItem(COMMENTI_KEY) || '[]') } catch { return [] }
-}
-
-function saveCommenti(commenti) {
-  localStorage.setItem(COMMENTI_KEY, JSON.stringify(commenti))
-}
+import { db } from '../firebase'
 
 export default function CommentiTab() {
   const { content } = useContent()
-  const [commenti, setCommenti] = useState(loadCommenti)
+  const [commenti, setCommenti] = useState([])
+
+  useEffect(() => {
+    const unsub = onValue(ref(db, 'commenti'), snapshot => {
+      setCommenti(snapshot.val() || [])
+    })
+    return () => unsub()
+  }, [])
 
   const inAttesa  = commenti.filter(c => !c.approved)
   const approvati = commenti.filter(c => c.approved)
@@ -25,15 +24,13 @@ export default function CommentiTab() {
 
   function approva(id) {
     const updated = commenti.map(c => c.id === id ? { ...c, approved: true } : c)
-    saveCommenti(updated)
-    setCommenti(updated)
+    set(ref(db, 'commenti'), updated)
   }
 
   function elimina(id) {
     if (!confirm('Eliminare questo commento?')) return
     const updated = commenti.filter(c => c.id !== id)
-    saveCommenti(updated)
-    setCommenti(updated)
+    set(ref(db, 'commenti'), updated)
   }
 
   function CommentoRow({ c, showApprove = false }) {
@@ -71,7 +68,6 @@ export default function CommentiTab() {
 
   return (
     <div className="max-w-2xl">
-      {/* In attesa */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-4">
           <h2 className="text-white font-semibold text-lg">In attesa di moderazione</h2>
@@ -81,21 +77,17 @@ export default function CommentiTab() {
             </span>
           )}
         </div>
-
         {inAttesa.length === 0 ? (
           <div className="text-center py-10 border border-dashed border-white/10 rounded-2xl">
             <p className="text-gray-600 text-sm">Nessun commento in attesa.</p>
           </div>
         ) : (
           <div className="space-y-3">
-            {inAttesa.map(c => (
-              <CommentoRow key={c.id} c={c} showApprove />
-            ))}
+            {inAttesa.map(c => <CommentoRow key={c.id} c={c} showApprove />)}
           </div>
         )}
       </div>
 
-      {/* Approvati */}
       {approvati.length > 0 && (
         <div>
           <h2 className="text-white font-semibold text-lg mb-4">
@@ -103,9 +95,7 @@ export default function CommentiTab() {
             <span className="ml-2 text-xs text-gray-500 font-normal">({approvati.length})</span>
           </h2>
           <div className="space-y-3">
-            {approvati.map(c => (
-              <CommentoRow key={c.id} c={c} showApprove={false} />
-            ))}
+            {approvati.map(c => <CommentoRow key={c.id} c={c} showApprove={false} />)}
           </div>
         </div>
       )}

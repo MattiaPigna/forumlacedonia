@@ -1,4 +1,6 @@
-import { createContext, useContext, useState, useCallback } from 'react'
+import { createContext, useContext, useState, useCallback, useEffect } from 'react'
+import { ref, onValue, set } from 'firebase/database'
+import { db } from '../firebase'
 
 const DEFAULT_CONTENT = {
   faqs: [
@@ -58,7 +60,7 @@ const DEFAULT_CONTENT = {
 
 const STORAGE_KEY = 'forum_content'
 
-function loadContent() {
+function loadLocalContent() {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
     if (stored) {
@@ -77,18 +79,41 @@ function loadContent() {
 const ContentContext = createContext(null)
 
 export function ContentProvider({ children }) {
-  const [content, setContent] = useState(loadContent)
+  const [content, setContent] = useState(loadLocalContent)
+  const [ready, setReady] = useState(false)
 
+  // Sync da Firebase → stato locale
+  useEffect(() => {
+    const dbRef = ref(db, 'content')
+    const unsub = onValue(dbRef, snapshot => {
+      const data = snapshot.val()
+      if (data) {
+        const merged = {
+          ...DEFAULT_CONTENT,
+          ...data,
+          contacts: { ...DEFAULT_CONTENT.contacts, ...(data.contacts || {}) },
+          theme: { ...DEFAULT_CONTENT.theme, ...(data.theme || {}) },
+        }
+        setContent(merged)
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(merged))
+      }
+      setReady(true)
+    })
+    return () => unsub()
+  }, [])
+
+  // Scrivi su Firebase (il listener aggiorna lo stato automaticamente)
   const updateContent = useCallback((key, value) => {
     setContent(prev => {
       const next = { ...prev, [key]: value }
+      set(ref(db, 'content'), next)
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
       return next
     })
   }, [])
 
   return (
-    <ContentContext.Provider value={{ content, updateContent }}>
+    <ContentContext.Provider value={{ content, updateContent, ready }}>
       {children}
     </ContentContext.Provider>
   )
