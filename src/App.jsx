@@ -15,6 +15,7 @@ import Hero            from './components/Hero'
 import Principles      from './components/Principles'
 import Bacheca         from './components/Bacheca'
 import EventiSection  from './components/EventiSection'
+import EventoPopup    from './components/EventoPopup'
 import SondaggiSection from './components/SondaggiSection'
 import FAQ             from './components/FAQ'
 import ContactSection  from './components/ContactSection'
@@ -49,6 +50,7 @@ function AdminApp() {
 function MainApp() {
   return (
     <div className="min-h-screen">
+      <EventoPopup />
       <Navbar />
       <Hero />
       <Principles />

@@ -48,13 +48,13 @@ export default function EventiTab() {
   const [editing, setEditing] = useState(null)
   const [saved, setSaved] = useState(false)
   const [form, setForm] = useState({
-    title: '', description: '', date: '', time: '', location: '', published: true,
+    title: '', description: '', date: '', time: '', location: '', published: true, popup: false,
   })
 
   const eventi = content.eventi || []
 
   function openNew() {
-    setForm({ title: '', description: '', date: '', time: '', location: '', published: true })
+    setForm({ title: '', description: '', date: '', time: '', location: '', published: true, popup: false })
     setEditing('new')
   }
   function openEdit(ev) {
@@ -121,6 +121,17 @@ export default function EventiTab() {
               <span className="text-gray-400 text-sm">{form.published ? 'Pubblicato' : 'Bozza (non visibile)'}</span>
             </label>
           </Field>
+          <Field label="Popup all'apertura del sito">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <div
+                onClick={() => setForm(f => ({ ...f, popup: !f.popup }))}
+                className={`relative w-10 h-5 rounded-full transition-colors cursor-pointer ${form.popup ? 'bg-violet-500' : 'bg-white/10'}`}
+              >
+                <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all ${form.popup ? 'left-5' : 'left-0.5'}`} />
+              </div>
+              <span className="text-gray-400 text-sm">{form.popup ? 'Appare come popup all\'apertura' : 'Nessun popup'}</span>
+            </label>
+          </Field>
           <div className="flex gap-3 pt-2">
             <button
               onClick={handleSave}
@@ -177,6 +188,9 @@ export default function EventiTab() {
                 <p className="text-gray-500 text-xs">{ev.date}{ev.time ? ` alle ${ev.time}` : ''}{ev.location ? ` — ${ev.location}` : ''}</p>
               </div>
               <div className="flex items-center gap-2 flex-shrink-0">
+                {ev.popup && (
+                  <span className="text-xs px-2 py-1 rounded-lg border text-violet-400 border-violet-500/30">Popup</span>
+                )}
                 <button onClick={() => togglePublished(ev.id)} className={`text-xs px-2 py-1 rounded-lg border transition-colors ${ev.published ? 'text-green-400 border-green-500/30 hover:bg-green-500/10' : 'text-gray-500 border-white/10 hover:bg-white/5'}`}>
                   {ev.published ? 'Live' : 'Bozza'}
                 </button>
