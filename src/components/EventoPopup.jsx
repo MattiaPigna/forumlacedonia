@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { useContent } from '../context/ContentContext'
 
 export default function EventoPopup() {
@@ -29,8 +30,8 @@ export default function EventoPopup() {
     } catch { return dateStr }
   }
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={close} />
 
@@ -99,6 +100,7 @@ export default function EventoPopup() {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
