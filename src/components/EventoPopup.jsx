@@ -13,15 +13,11 @@ export default function EventoPopup() {
 
     if (popupEvents.length === 0) return
 
-    const dismissed = sessionStorage.getItem('popup_dismissed')
-    if (dismissed) return
-
     setEvento(popupEvents[0])
     setVisible(true)
   }, [content.eventi])
 
   function close() {
-    sessionStorage.setItem('popup_dismissed', '1')
     setVisible(false)
   }
 
