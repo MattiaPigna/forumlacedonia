@@ -16,6 +16,7 @@ import Principles      from './components/Principles'
 import Bacheca         from './components/Bacheca'
 import EventiSection  from './components/EventiSection'
 import EventoPopup    from './components/EventoPopup'
+import Notizie        from './components/Notizie'
 import SondaggiSection from './components/SondaggiSection'
 import FAQ             from './components/FAQ'
 import ContactSection  from './components/ContactSection'
@@ -55,6 +56,7 @@ function MainApp() {
       <Hero />
       <Principles />
       <Bacheca />
+      <Notizie />
       <EventiSection />
       <SondaggiSection homeOnly />
       <FAQ />
