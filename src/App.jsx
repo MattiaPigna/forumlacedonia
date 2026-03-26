@@ -14,6 +14,7 @@ import Navbar          from './components/Navbar'
 import Hero            from './components/Hero'
 import Principles      from './components/Principles'
 import Bacheca         from './components/Bacheca'
+import EventiSection  from './components/EventiSection'
 import SondaggiSection from './components/SondaggiSection'
 import FAQ             from './components/FAQ'
 import ContactSection  from './components/ContactSection'
@@ -52,6 +53,7 @@ function MainApp() {
       <Hero />
       <Principles />
       <Bacheca />
+      <EventiSection />
       <SondaggiSection homeOnly />
       <FAQ />
       <ContactSection />
