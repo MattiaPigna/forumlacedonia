@@ -10,6 +10,7 @@ import RegolamentoPage from './pages/RegolamentoPage'
 import EventiPage      from './pages/EventiPage'
 import DocumentiPage   from './pages/DocumentiPage'
 import BachecaPage     from './pages/BachecaPage'
+import SondaggiPage    from './pages/SondaggiPage'
 import Navbar          from './components/Navbar'
 import Hero            from './components/Hero'
 import Principles      from './components/Principles'
@@ -80,6 +81,7 @@ export default function App() {
        path === '/eventi'      ? <EventiPage />     :
        path === '/documenti'   ? <DocumentiPage />  :
        path === '/bacheca'     ? <BachecaPage />    :
+       path === '/sondaggi'    ? <SondaggiPage />   :
        <MainApp />}
     </ContentProvider>
   )
