@@ -716,6 +716,8 @@ function IdeeTab() {
 
 /* ── IMPOSTAZIONI ────────────────────────── */
 function ImpostazioniTab({ onLogout }) {
+  const { content, updateContent } = useContent()
+  const candidaturaAttiva = content.candidaturaAttiva !== false
   const [oldPw, setOldPw]   = useState('')
   const [newPw, setNewPw]   = useState('')
   const [confPw, setConfPw] = useState('')
@@ -773,6 +775,28 @@ function ImpostazioniTab({ onLogout }) {
 
   return (
     <div className="max-w-md space-y-8">
+
+      {/* Candidatura */}
+      <div>
+        <h2 className="text-white font-semibold text-lg mb-1">Tasto Candidatura</h2>
+        <p className="text-gray-500 text-xs mb-4">Mostra o nascondi il tasto "Candidati" su tutto il sito.</p>
+        <div className={`flex items-center justify-between p-4 rounded-xl border ${candidaturaAttiva ? 'border-green-500/20 bg-green-500/5' : 'border-yellow-500/20 bg-yellow-500/5'}`}>
+          <div className="flex items-center gap-3">
+            <div className={`w-2.5 h-2.5 rounded-full ${candidaturaAttiva ? 'bg-green-400' : 'bg-yellow-400'}`} />
+            <div>
+              <p className="text-white text-sm font-medium">{candidaturaAttiva ? 'Candidatura attiva' : 'Candidatura disattivata'}</p>
+              <p className="text-gray-500 text-xs mt-0.5">{candidaturaAttiva ? 'Il tasto "Candidati" è visibile.' : 'Il tasto "Candidati" è nascosto.'}</p>
+            </div>
+          </div>
+          <button
+            onClick={() => updateContent('candidaturaAttiva', !candidaturaAttiva)}
+            className={`relative w-12 h-6 rounded-full transition-colors duration-200 flex-shrink-0 ${candidaturaAttiva ? 'bg-green-500' : 'bg-gray-700'}`}
+          >
+            <span className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 ${candidaturaAttiva ? 'translate-x-7' : 'translate-x-1'}`} />
+          </button>
+        </div>
+      </div>
+
       {/* Change password */}
       <div>
         <h2 className="text-white font-semibold text-lg mb-4">Cambia Password</h2>

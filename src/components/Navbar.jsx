@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useContent } from '../context/ContentContext'
 
 const CANDIDATURE_URL = 'https://sign-here-easily.lovable.app/'
 
@@ -33,6 +34,8 @@ const ESPLORA_LINKS = [
 ]
 
 export default function Navbar() {
+  const { content } = useContent()
+  const candidaturaAttiva = content.candidaturaAttiva !== false
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [esploraOpen, setEsploraOpen] = useState(false)
@@ -113,14 +116,16 @@ export default function Navbar() {
             )}
           </div>
 
-          <a
-            href={CANDIDATURE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-primary text-sm flex-shrink-0"
-          >
-            Candidati
-          </a>
+          {candidaturaAttiva && (
+            <a
+              href={CANDIDATURE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary text-sm flex-shrink-0"
+            >
+              Candidati
+            </a>
+          )}
         </div>
 
         {/* Hamburger */}
@@ -149,15 +154,17 @@ export default function Navbar() {
               {label}
             </a>
           ))}
-          <a
-            href={CANDIDATURE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setIsMenuOpen(false)}
-            className="btn-primary mt-4 justify-center"
-          >
-            Candidati al Forum
-          </a>
+          {candidaturaAttiva && (
+            <a
+              href={CANDIDATURE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setIsMenuOpen(false)}
+              className="btn-primary mt-4 justify-center"
+            >
+              Candidati al Forum
+            </a>
+          )}
         </div>
       </div>
     </nav>

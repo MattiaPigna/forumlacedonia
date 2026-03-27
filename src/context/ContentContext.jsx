@@ -51,6 +51,7 @@ const DEFAULT_CONTENT = {
   },
   articles: [],
   bachekaAperta: true,
+  candidaturaAttiva: true,
   theme: { accent1: '#6366f1', accent2: '#8b5cf6', accent3: '#4ade80', accent4: '#22d3ee', accent5: '#a78bfa' },
   iscritti: 0,
   eventi: [],
