@@ -1,4 +1,5 @@
 import logoImg from '../assets/logo.png'
+import { useContent } from '../context/ContentContext'
 
 const CANDIDATURE_URL = 'https://sign-here-easily.lovable.app/'
 
@@ -17,6 +18,8 @@ const LEGAL_LINKS = [
 ]
 
 export default function Footer() {
+  const { content } = useContent()
+  const candidaturaAttiva = !content.candidaturaDisattivata
   const year = new Date().getFullYear()
 
   return (
@@ -31,14 +34,16 @@ export default function Footer() {
               Unisciti al Forum dei Giovani.
             </h3>
           </div>
-          <a
-            href={CANDIDATURE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-primary text-base px-8 py-3.5 flex-shrink-0"
-          >
-            Candidati ora →
-          </a>
+          {candidaturaAttiva && (
+            <a
+              href={CANDIDATURE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary text-base px-8 py-3.5 flex-shrink-0"
+            >
+              Candidati ora →
+            </a>
+          )}
         </div>
 
         {/* ── Main grid ── */}

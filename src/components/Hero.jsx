@@ -33,6 +33,7 @@ function AnimatedStat({ value, label }) {
 
 export default function Hero() {
   const { content } = useContent()
+  const candidaturaAttiva = !content.candidaturaDisattivata
   const baseStats = content.stats
   const STATS = content.iscritti > 0
     ? [...baseStats, { value: content.iscritti, label: 'Iscritti al Forum' }]
@@ -141,7 +142,7 @@ export default function Hero() {
 
         {/* CTAs */}
         <div className="animate-fade-up delay-5 opacity-0 flex flex-wrap items-center justify-center gap-4 mb-20">
-          <a
+          {candidaturaAttiva && <a
             href={CANDIDATURE_URL}
             target="_blank"
             rel="noopener noreferrer"
@@ -157,7 +158,7 @@ export default function Hero() {
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
-          </a>
+          </a>}
 
           <a
             href="/#principles"

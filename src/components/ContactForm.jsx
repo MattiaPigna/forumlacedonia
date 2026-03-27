@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useReveal } from '../hooks/useReveal'
+import { useContent } from '../context/ContentContext'
 
 const CANDIDATURE_URL = 'https://sign-here-easily.lovable.app/'
 
@@ -61,6 +62,8 @@ export default function ContactForm() {
   const [errors,      setErrors]      = useState({})
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [ref, isVisible]              = useReveal()
+  const { content } = useContent()
+  const candidaturaAttiva = !content.candidaturaDisattivata
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -123,14 +126,16 @@ export default function ContactForm() {
             </p>
 
             {/* Direct candidature CTA */}
-            <a
-              href={CANDIDATURE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-primary mb-10 w-fit"
-            >
-              Candidati direttamente →
-            </a>
+            {candidaturaAttiva && (
+              <a
+                href={CANDIDATURE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary mb-10 w-fit"
+              >
+                Candidati direttamente →
+              </a>
+            )}
 
             {/* Contact details */}
             <div className="space-y-5">
