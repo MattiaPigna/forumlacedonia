@@ -3,7 +3,8 @@ import { ref, onValue, set, remove } from 'firebase/database'
 import { useContent } from '../context/ContentContext'
 import { db } from '../firebase'
 
-function genId() { return Date.now() + Math.random() }
+function genId() { return Date.now() }
+const safeId = id => String(id).replace(/\./g, '_')
 
 function SaveBadge({ show }) {
   if (!show) return null
@@ -88,7 +89,7 @@ export default function SondaggiTab() {
   }
   function resetVoti(id) {
     if (!confirm('Azzerare tutti i voti di questo sondaggio?')) return
-    remove(ref(db, `voti/${id}`))
+    remove(ref(db, `voti/${safeId(id)}`))
     setSaved(true)
     setTimeout(() => setSaved(false), 2000)
   }

@@ -9,7 +9,7 @@ import SondaggiTab  from '../admin/SondaggiTab'
 import CommentiTab  from '../admin/CommentiTab'
 
 /* ── helpers ─────────────────────────────── */
-function genId() { return Date.now() + Math.random() }
+function genId() { return Date.now() }
 
 function SaveBadge({ show }) {
   if (!show) return null

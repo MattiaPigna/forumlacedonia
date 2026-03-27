@@ -4,23 +4,26 @@ import { useContent } from '../context/ContentContext'
 import { useReveal } from '../hooks/useReveal'
 import { db } from '../firebase'
 
+const safeId = id => String(id).replace(/\./g, '_')
+
 function SondaggioCard({ sondaggio }) {
   const votedKey = 'voted_' + sondaggio.id
+  const sid = safeId(sondaggio.id)
   const [voted, setVoted] = useState(() => !!sessionStorage.getItem(votedKey))
   const [sVoti, setSVoti] = useState({})
 
   useEffect(() => {
-    const unsub = onValue(ref(db, `voti/${sondaggio.id}`), snapshot => {
+    const unsub = onValue(ref(db, `voti/${sid}`), snapshot => {
       setSVoti(snapshot.val() || {})
     })
     return () => unsub()
-  }, [sondaggio.id])
+  }, [sid])
 
   const totale = Object.values(sVoti).reduce((a, b) => a + b, 0)
 
   function handleVote(optId) {
     if (voted) return
-    update(ref(db, `voti/${sondaggio.id}`), { [optId]: increment(1) })
+    update(ref(db, `voti/${sid}`), { [optId]: increment(1) })
     sessionStorage.setItem(votedKey, '1')
     setVoted(true)
   }
