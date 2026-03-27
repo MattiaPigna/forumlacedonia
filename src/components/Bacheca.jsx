@@ -1,16 +1,13 @@
 import { useState } from 'react'
+import { ref, get, set } from 'firebase/database'
+import { db } from '../firebase'
 import { useReveal } from '../hooks/useReveal'
 import { useContent } from '../context/ContentContext'
 
-const STORAGE_KEY = 'forum_idee'
-
-function loadIdee() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]') } catch { return [] }
-}
-function saveIdea(idea) {
-  const idee = loadIdee()
-  idee.unshift(idea)
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(idee))
+async function saveIdea(idea) {
+  const snapshot = await get(ref(db, 'idee'))
+  const idee = snapshot.val() || []
+  await set(ref(db, 'idee'), [idea, ...idee])
 }
 
 export default function Bacheca() {
@@ -22,11 +19,11 @@ export default function Bacheca() {
   const [sent,  setSent]  = useState(false)
   const [error, setError] = useState('')
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
     if (testo.trim().length < 10) { setError('Scrivi almeno 10 caratteri.'); return }
     setError('')
-    saveIdea({
+    await saveIdea({
       id:    Date.now() + Math.random(),
       nome:  nome.trim() || 'Anonimo',
       testo: testo.trim(),

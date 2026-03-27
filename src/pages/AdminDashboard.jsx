@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import { ref, onValue, set } from 'firebase/database'
+import { db } from '../firebase'
 import { useContent } from '../context/ContentContext'
 import TemaTab      from '../admin/TemaTab'
 import EventiTab    from '../admin/EventiTab'
@@ -569,41 +571,38 @@ function ContattiTab() {
 }
 
 /* ── IDEE BACHECA ────────────────────────── */
-const IDEE_KEY = 'forum_idee'
-
-function loadIdee() {
-  try { return JSON.parse(localStorage.getItem(IDEE_KEY) || '[]') } catch { return [] }
-}
-
 function IdeeTab() {
   const { content, updateContent } = useContent()
   const bachekaAperta = content.bachekaAperta !== false
-  const [idee, setIdee] = useState(loadIdee)
+  const [idee, setIdee] = useState([])
   const [selected, setSelected] = useState(null)
+
+  useEffect(() => {
+    const unsub = onValue(ref(db, 'idee'), snapshot => {
+      setIdee(snapshot.val() || [])
+    })
+    return () => unsub()
+  }, [])
 
   const unread = idee.filter(i => !i.letta).length
 
   function markRead(id) {
     const updated = idee.map(i => i.id === id ? { ...i, letta: true } : i)
-    setIdee(updated)
-    localStorage.setItem(IDEE_KEY, JSON.stringify(updated))
+    set(ref(db, 'idee'), updated)
   }
   function markUnread(id) {
     const updated = idee.map(i => i.id === id ? { ...i, letta: false } : i)
-    setIdee(updated)
-    localStorage.setItem(IDEE_KEY, JSON.stringify(updated))
+    set(ref(db, 'idee'), updated)
   }
   function deleteIdea(id) {
     if (!confirm('Eliminare questa idea?')) return
     const updated = idee.filter(i => i.id !== id)
-    setIdee(updated)
-    localStorage.setItem(IDEE_KEY, JSON.stringify(updated))
+    set(ref(db, 'idee'), updated)
     if (selected?.id === id) setSelected(null)
   }
   function markAllRead() {
     const updated = idee.map(i => ({ ...i, letta: true }))
-    setIdee(updated)
-    localStorage.setItem(IDEE_KEY, JSON.stringify(updated))
+    set(ref(db, 'idee'), updated)
   }
 
   if (selected) {
@@ -842,33 +841,25 @@ const TABS = [
 ]
 
 function useUnreadIdee() {
-  const [count, setCount] = useState(() => {
-    try { return JSON.parse(localStorage.getItem(IDEE_KEY) || '[]').filter(i => !i.letta).length } catch { return 0 }
-  })
+  const [count, setCount] = useState(0)
   useEffect(() => {
-    const sync = () => {
-      try { setCount(JSON.parse(localStorage.getItem(IDEE_KEY) || '[]').filter(i => !i.letta).length) } catch { setCount(0) }
-    }
-    window.addEventListener('storage', sync)
-    const interval = setInterval(sync, 2000)
-    return () => { window.removeEventListener('storage', sync); clearInterval(interval) }
+    const unsub = onValue(ref(db, 'idee'), snapshot => {
+      const idee = snapshot.val() || []
+      setCount(idee.filter(i => !i.letta).length)
+    })
+    return () => unsub()
   }, [])
   return count
 }
 
-const COMMENTI_KEY_ADMIN = 'forum_commenti'
-
 function usePendingCommenti() {
-  const [count, setCount] = useState(() => {
-    try { return JSON.parse(localStorage.getItem(COMMENTI_KEY_ADMIN) || '[]').filter(c => !c.approved).length } catch { return 0 }
-  })
+  const [count, setCount] = useState(0)
   useEffect(() => {
-    const sync = () => {
-      try { setCount(JSON.parse(localStorage.getItem(COMMENTI_KEY_ADMIN) || '[]').filter(c => !c.approved).length) } catch { setCount(0) }
-    }
-    window.addEventListener('storage', sync)
-    const interval = setInterval(sync, 2000)
-    return () => { window.removeEventListener('storage', sync); clearInterval(interval) }
+    const unsub = onValue(ref(db, 'commenti'), snapshot => {
+      const commenti = snapshot.val() || []
+      setCount(commenti.filter(c => !c.approved).length)
+    })
+    return () => unsub()
   }, [])
   return count
 }
