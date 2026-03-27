@@ -15,7 +15,7 @@ const NAV_LINKS_MOBILE = [
   { label: 'Officine',     href: '/officine'     },
   { label: 'Notizie',      href: '/notizie'      },
   { label: 'Bacheca',      href: '/bacheca'      },
-  { label: 'Calendario',   href: '/eventi'       },
+  { label: 'Eventi',        href: '/eventi'       },
   { label: 'Documenti',    href: '/documenti'    },
   { label: 'Regolamento',  href: '/regolamento'  },
   { label: 'FAQ',          href: '/#faq'         },
@@ -27,7 +27,7 @@ const ESPLORA_LINKS = [
   { label: 'Regolamento', href: '/regolamento'},
   { label: 'Documenti',   href: '/documenti'  },
   { label: 'Calendario',  href: '/eventi'     },
-  { label: 'Sondaggi',    href: '/bacheca'    },
+  { label: 'Sondaggi',    href: '/#sondaggi'  },
   { label: 'FAQ',         href: '/#faq'       },
 ]
 
