@@ -3,8 +3,9 @@ import { ref, onValue, set, remove } from 'firebase/database'
 import { useContent } from '../context/ContentContext'
 import { db } from '../firebase'
 
-function genId() { return Date.now() }
-const safeId = id => String(id).replace(/\./g, '_')
+let _seq = 0
+function genId() { return `${Date.now()}_${++_seq}` }
+const safeId = id => String(id).replace(/[.\[\]#$]/g, '_')
 
 function SaveBadge({ show }) {
   if (!show) return null
@@ -236,7 +237,7 @@ export default function SondaggiTab() {
       ) : (
         <div className="space-y-4">
           {sondaggi.map(s => {
-            const sVoti = votiTutti[s.id] || {}
+            const sVoti = votiTutti[safeId(s.id)] || {}
             const totale = Object.values(sVoti).reduce((a, b) => a + b, 0)
             return (
               <div key={s.id} className="p-5 rounded-xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] transition-colors">
@@ -271,7 +272,7 @@ export default function SondaggiTab() {
                 {totale > 0 && (
                   <div className="space-y-2 mt-3 pt-3 border-t border-white/[0.06]">
                     {(s.options || []).map(opt => {
-                      const count = sVoti[opt.id] || 0
+                      const count = sVoti[safeId(opt.id)] || 0
                       const perc = totale > 0 ? Math.round((count / totale) * 100) : 0
                       return (
                         <div key={opt.id}>

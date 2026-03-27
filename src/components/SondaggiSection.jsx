@@ -4,7 +4,7 @@ import { useContent } from '../context/ContentContext'
 import { useReveal } from '../hooks/useReveal'
 import { db } from '../firebase'
 
-const safeId = id => String(id).replace(/\./g, '_')
+const safeId = id => String(id).replace(/[.\[\]#$]/g, '_')
 
 function SondaggioCard({ sondaggio }) {
   const votedKey = 'voted_' + sondaggio.id
@@ -23,7 +23,7 @@ function SondaggioCard({ sondaggio }) {
 
   function handleVote(optId) {
     if (voted) return
-    update(ref(db, `voti/${sid}`), { [optId]: increment(1) })
+    update(ref(db, `voti/${sid}`), { [safeId(optId)]: increment(1) })
     sessionStorage.setItem(votedKey, '1')
     setVoted(true)
   }
@@ -47,7 +47,7 @@ function SondaggioCard({ sondaggio }) {
       {voted ? (
         <div className="space-y-3">
           {opts.map(opt => {
-            const count = sVoti[opt.id] || 0
+            const count = sVoti[safeId(opt.id)] || 0
             const perc = totale > 0 ? Math.round((count / totale) * 100) : 0
             return (
               <div key={opt.id}>

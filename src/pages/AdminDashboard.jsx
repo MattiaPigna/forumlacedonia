@@ -9,7 +9,8 @@ import SondaggiTab  from '../admin/SondaggiTab'
 import CommentiTab  from '../admin/CommentiTab'
 
 /* ── helpers ─────────────────────────────── */
-function genId() { return Date.now() }
+let _seq = 0
+function genId() { return `${Date.now()}_${++_seq}` }
 
 function SaveBadge({ show }) {
   if (!show) return null
