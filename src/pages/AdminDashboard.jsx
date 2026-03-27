@@ -574,7 +574,7 @@ function ContattiTab() {
 /* ── IDEE BACHECA ────────────────────────── */
 function IdeeTab() {
   const { content, updateContent } = useContent()
-  const bachekaAperta = content.bachekaAperta !== false
+  const bachekaAperta = !content.bachekaChiusa
   const [idee, setIdee] = useState([])
   const [selected, setSelected] = useState(null)
 
@@ -670,7 +670,7 @@ function IdeeTab() {
           </div>
         </div>
         <button
-          onClick={() => updateContent('bachekaAperta', !bachekaAperta)}
+          onClick={() => updateContent('bachekaChiusa', bachekaAperta ? true : null)}
           className={`relative w-12 h-6 rounded-full transition-colors duration-200 flex-shrink-0 ${bachekaAperta ? 'bg-green-500' : 'bg-gray-700'}`}
         >
           <span className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 ${bachekaAperta ? 'translate-x-7' : 'translate-x-1'}`} />
@@ -717,7 +717,7 @@ function IdeeTab() {
 /* ── IMPOSTAZIONI ────────────────────────── */
 function ImpostazioniTab({ onLogout }) {
   const { content, updateContent } = useContent()
-  const candidaturaAttiva = content.candidaturaAttiva !== false
+  const candidaturaAttiva = !content.candidaturaDisattivata
   const [oldPw, setOldPw]   = useState('')
   const [newPw, setNewPw]   = useState('')
   const [confPw, setConfPw] = useState('')
@@ -789,7 +789,7 @@ function ImpostazioniTab({ onLogout }) {
             </div>
           </div>
           <button
-            onClick={() => updateContent('candidaturaAttiva', !candidaturaAttiva)}
+            onClick={() => updateContent('candidaturaDisattivata', candidaturaAttiva ? true : null)}
             className={`relative w-12 h-6 rounded-full transition-colors duration-200 flex-shrink-0 ${candidaturaAttiva ? 'bg-green-500' : 'bg-gray-700'}`}
           >
             <span className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 ${candidaturaAttiva ? 'translate-x-7' : 'translate-x-1'}`} />

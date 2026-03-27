@@ -35,7 +35,7 @@ const ESPLORA_LINKS = [
 
 export default function Navbar() {
   const { content } = useContent()
-  const candidaturaAttiva = content.candidaturaAttiva !== false
+  const candidaturaAttiva = !content.candidaturaDisattivata
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [esploraOpen, setEsploraOpen] = useState(false)

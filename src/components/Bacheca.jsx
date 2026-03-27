@@ -12,7 +12,7 @@ async function saveIdea(idea) {
 
 export default function Bacheca() {
   const { content } = useContent()
-  const bachekaAperta = content.bachekaAperta !== false
+  const bachekaAperta = !content.bachekaChiusa
   const [ref, isVisible] = useReveal()
   const [nome,  setNome]  = useState('')
   const [testo, setTesto] = useState('')
