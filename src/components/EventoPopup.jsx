@@ -6,6 +6,7 @@ export default function EventoPopup() {
   const { content } = useContent()
   const [evento, setEvento] = useState(null)
   const [visible, setVisible] = useState(false)
+  const [nonMostrare, setNonMostrare] = useState(false)
 
   useEffect(() => {
     const popupEvents = (content.eventi || [])
@@ -14,11 +15,18 @@ export default function EventoPopup() {
 
     if (popupEvents.length === 0) return
 
-    setEvento(popupEvents[0])
+    const ev = popupEvents[0]
+    const key = `popup_dismissed_${ev.id}`
+    if (sessionStorage.getItem(key)) return
+
+    setEvento(ev)
     setVisible(true)
   }, [content.eventi])
 
   function close() {
+    if (nonMostrare && evento) {
+      sessionStorage.setItem(`popup_dismissed_${evento.id}`, '1')
+    }
     setVisible(false)
   }
 
@@ -81,6 +89,17 @@ export default function EventoPopup() {
         {evento.description && (
           <p className="text-gray-400 text-sm leading-relaxed mb-6">{evento.description}</p>
         )}
+
+        {/* Non mostrare più */}
+        <label className="flex items-center gap-2 mb-4 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={nonMostrare}
+            onChange={e => setNonMostrare(e.target.checked)}
+            className="w-4 h-4 rounded accent-indigo-500 cursor-pointer"
+          />
+          <span className="text-gray-500 text-xs">Non mostrare più per questa sessione</span>
+        </label>
 
         {/* Azioni */}
         <div className="flex gap-3">
