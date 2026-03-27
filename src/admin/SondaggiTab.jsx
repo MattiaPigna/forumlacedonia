@@ -91,6 +91,7 @@ export default function SondaggiTab() {
   function resetVoti(id) {
     if (!confirm('Azzerare tutti i voti di questo sondaggio?')) return
     remove(ref(db, `voti/${safeId(id)}`))
+    remove(ref(db, `votanti/${safeId(id)}`))
     setSaved(true)
     setTimeout(() => setSaved(false), 2000)
   }

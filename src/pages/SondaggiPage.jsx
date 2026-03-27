@@ -6,26 +6,40 @@ import SubPageLayout from '../components/SubPageLayout'
 
 const safeId = id => String(id).replace(/[.\[\]#$]/g, '_')
 
+function getClientId() {
+  let id = localStorage.getItem('forum_client_id')
+  if (!id) {
+    id = Math.random().toString(36).slice(2) + Date.now().toString(36)
+    localStorage.setItem('forum_client_id', id)
+  }
+  return id
+}
+
 function SondaggioCard({ sondaggio }) {
-  const votedKey = 'voted_' + sondaggio.id
+  const clientId = getClientId()
   const sid = safeId(sondaggio.id)
-  const [voted, setVoted] = useState(() => !!sessionStorage.getItem(votedKey))
+  const [voted, setVoted] = useState(false)
   const [sVoti, setSVoti] = useState({})
 
   useEffect(() => {
-    const unsub = onValue(ref(db, `voti/${sid}`), snapshot => {
+    const unsub1 = onValue(ref(db, `voti/${sid}`), snapshot => {
       setSVoti(snapshot.val() || {})
     })
-    return () => unsub()
-  }, [sid])
+    const unsub2 = onValue(ref(db, `votanti/${sid}/${clientId}`), snapshot => {
+      if (snapshot.exists()) setVoted(true)
+    })
+    return () => { unsub1(); unsub2() }
+  }, [sid, clientId])
 
   const totale = Object.values(sVoti).reduce((a, b) => a + b, 0)
   const opts = sondaggio.options || []
 
   function handleVote(optId) {
     if (voted || sondaggio.closed) return
-    update(ref(db, `voti/${sid}`), { [safeId(optId)]: increment(1) })
-    sessionStorage.setItem(votedKey, '1')
+    update(ref(db), {
+      [`voti/${sid}/${safeId(optId)}`]: increment(1),
+      [`votanti/${sid}/${clientId}`]: safeId(optId),
+    })
     setVoted(true)
   }
 
