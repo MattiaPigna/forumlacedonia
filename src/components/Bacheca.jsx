@@ -1,13 +1,13 @@
 import { useState } from 'react'
-import { ref, get, set } from 'firebase/database'
+import { ref as dbRef, get, set } from 'firebase/database'
 import { db } from '../firebase'
 import { useReveal } from '../hooks/useReveal'
 import { useContent } from '../context/ContentContext'
 
 async function saveIdea(idea) {
-  const snapshot = await get(ref(db, 'idee'))
+  const snapshot = await get(dbRef(db, 'idee'))
   const idee = snapshot.val() || []
-  await set(ref(db, 'idee'), [idea, ...idee])
+  await set(dbRef(db, 'idee'), [idea, ...idee])
 }
 
 export default function Bacheca() {
